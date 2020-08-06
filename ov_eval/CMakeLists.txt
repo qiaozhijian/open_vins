@@ -58,13 +58,15 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -Wall -Wuninitialized -Wmaybe-uninit
 # Include our header files
 include_directories(
         src
-        ${EIGEN3_INCLUDE_DIR}
+        "/usr/local/include/eigen3"
         ${Boost_INCLUDE_DIRS}
         ${PYTHON_INCLUDE_DIRS}
         /usr/local/lib/python2.7/dist-packages/numpy/core/include
         /usr/local/lib/python2.7/site-packages/numpy/core/include
         ${catkin_INCLUDE_DIRS}
 )
+message("\n\n\n\n\n")
+message(${EIGEN3_INCLUDE_DIR})
 
 # Set link libraries used by all binaries
 list(APPEND thirdparty_libraries

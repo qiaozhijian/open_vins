@@ -51,9 +51,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -Wall -Wuninitialized -Wmaybe-uninit
 # Include our header files
 include_directories(
         src
-        ${EIGEN3_INCLUDE_DIR}
         ${Boost_INCLUDE_DIRS}
         ${catkin_INCLUDE_DIRS}
+        "/usr/local/include/eigen3"
 )
 
 # Set link libraries used by all binaries
