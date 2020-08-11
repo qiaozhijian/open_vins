@@ -1,5 +1,23 @@
 <launch>
 
+    <!-- mono or stereo and what ros bag to play -->
+    <arg name="max_cameras" default="2" />
+    <arg name="use_stereo"  default="true" />
+    <arg name="bag_start"   default="0" /> <!-- v1-2: 0, mh1: 40, mh2: 35, mh3-5: 20 -->
+    <arg name="bag"         default="/media/qzj/Document/grow/research/slamDataSet/EuRoC/V1_01_easy/V1_01_easy.bag" />
+
+    <!-- imu starting thresholds -->
+    <arg name="init_window_time"  default="0.75" />
+    <arg name="init_imu_thresh"   default="1.5" />
+
+    <!-- saving trajectory path and timing information -->
+    <arg name="dosave"      default="false" />
+    <arg name="dotime"      default="false" />
+    <arg name="path_est"    default="/tmp/traj_estimate.txt" />
+    <arg name="path_time"   default="/tmp/traj_timing.txt" />
+
+
+
     <node name="run_serial_msckf" pkg="ov_msckf" type="run_serial_msckf" output="screen">
 
         <!-- bag topics -->
