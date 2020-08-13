@@ -6,6 +6,9 @@
     <arg name="bag_start"   default="0" /> <!-- v1-2: 0, mh1: 40, mh2: 35, mh3-5: 20 -->
     <arg name="bag"         default="/media/qzj/Document/grow/research/slamDataSet/sweepRobot/round3/01/2020-07-26-19-47-34.bag" />
 <!--    <arg name="bag"         default="/media/qzj/Document/grow/research/slamDataSet/sweepRobot/round3/06/2020-07-29-18-43-57.bag" />-->
+<!--        <arg name="bag"         default="/media/qzj/Document/grow/research/slamDataSet/sweepRobot/round3/03/2020-07-26-19-50-56.bag" />-->
+
+
 
     <!-- imu starting thresholds -->
     <arg name="init_window_time"  default="0.75" />
@@ -108,7 +111,6 @@
             ]
         </rosparam>
 
-
     </node>
 
 
@@ -124,7 +126,7 @@
         </node>
     </group>
 
-    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find ov_msckf)/launch/display.rviz" />
+<!--    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find ov_msckf)/launch/display.rviz" />-->
 
 
 </launch>
