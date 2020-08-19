@@ -50,9 +50,9 @@ int main(int argc, char** argv)
     ros::init(argc, argv, "run_serial_msckf");
     ros::NodeHandle nh("~");
 
-    // Create our VIO system
+    // Create our VIO system 读入很多很多的参数
     VioManagerOptions params = parse_ros_nodehandler(nh);
-    sys = new VioManager(params);
+    sys = new VioManager(params); //初始化系统，状态变量，主要函数等
     viz = new RosVisualizer(nh, sys);
 
 
@@ -154,7 +154,7 @@ int main(int argc, char** argv)
         if (s2 != nullptr && m.getTopic() == topic_imu) {
             // convert into correct format
             double timem = (*s2).header.stamp.toSec();
-            Eigen::Matrix<double, 3, 1> wm, am;
+            Eigen::Matrix<double, 3, 1> wm, am; //弧度
             wm << (*s2).angular_velocity.x, (*s2).angular_velocity.y, (*s2).angular_velocity.z;
             am << (*s2).linear_acceleration.x, (*s2).linear_acceleration.y, (*s2).linear_acceleration.z;
             // send it to our VIO system
@@ -200,7 +200,6 @@ int main(int argc, char** argv)
             //}
         }
 
-
         // Fill our buffer if we have not
         if(has_left && img0_buffer.rows == 0) {
             has_left = false;
@@ -236,7 +235,7 @@ int main(int argc, char** argv)
         }
 
 
-        // If we are in stereo mode and have both left and right, then process
+        // If we are in stereo mode and have both left and right, then process, 设buffer是为了have both left and right
         if(max_cameras==2 && has_left && has_right) {
             // process once we have initialized with the GT
             Eigen::Matrix<double, 17, 1> imustate;

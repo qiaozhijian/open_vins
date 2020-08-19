@@ -29,7 +29,7 @@
 namespace ov_type {
 
 
-    /**
+    /** 四元数 + 位置
      * @brief Derived Type class that implements a 6 d.o.f pose
      *
      * Internally we use a JPLQuat quaternion representation for the orientation and 3D Vec position.
@@ -58,6 +58,7 @@ namespace ov_type {
         }
 
         /**
+         * override: 检查是否是重写了父类的函数
          * @brief Sets id used to track location of variable in the filter covariance
          *
          * Note that we update the sub-variables also.
@@ -76,7 +77,7 @@ namespace ov_type {
          * @param dx Correction vector (orientation then position)
          */
         void update(const Eigen::VectorXd dx) override {
-
+            //_size 为 6
             assert(dx.rows() == _size);
 
             Eigen::Matrix<double, 7, 1> newX = _value;
@@ -88,7 +89,7 @@ namespace ov_type {
             //Update orientation
             newX.block(0, 0, 4, 1) = ov_core::quat_multiply(dq, quat());
 
-            //Update position
+            //Update position 这里直接相加了竟然，不是传统的SE扰动模型
             newX.block(4, 0, 3, 1) += dx.block(3, 0, 3, 1);
 
             set_value(newX);

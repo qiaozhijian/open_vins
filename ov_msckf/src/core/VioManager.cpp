@@ -679,6 +679,14 @@ void VioManager::do_feature_propagate_update(double timestamp) {
              state->_imu->bias_a()(0),state->_imu->bias_a()(1),state->_imu->bias_a()(2));
 
 
+    ofstream f;
+    string filename = "/media/qzj/Document/grow/research/slamDataSet/sweepRobot/round3/robot08_opvs_stereo_vio.txt";
+    f.open(filename.c_str(), ios::out | ios::app);
+    f << fixed;
+    f << setprecision(9) << timelastupdate << " " << state->_imu->pos()(0) << " " << state->_imu->pos()(1) << " " << state->_imu->pos()(2) << " "
+    << state->_imu->quat()(0) << " " << state->_imu->quat()(1)<< " " << state->_imu->quat()(2) << " " << state->_imu->quat()(3) << endl;
+    f.close();
+
     // Debug for camera imu offset
     if(state->_options.do_calib_camera_timeoffset) {
         printf("camera-imu timeoffset = %.5f\n",state->_calib_dt_CAMtoIMU->value()(0));

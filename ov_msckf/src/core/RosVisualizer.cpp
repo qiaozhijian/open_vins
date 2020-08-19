@@ -225,17 +225,12 @@ void RosVisualizer::visualize_odometry(double timestamp) {
 
 void RosVisualizer::visualize_final() {
 
-    // Final time offset value
-    if(_app->get_state()->_options.do_calib_camera_timeoffset) {
-        printf(REDPURPLE "camera-imu timeoffset = %.5f\n\n" RESET,_app->get_state()->_calib_dt_CAMtoIMU->value()(0));
-    }
-
     // Final camera intrinsics
     if(_app->get_state()->_options.do_calib_camera_intrinsics) {
         for(int i=0; i<_app->get_state()->_options.num_cameras; i++) {
             Vec* calib = _app->get_state()->_cam_intrinsics.at(i);
             printf(REDPURPLE "cam%d intrinsics:\n" RESET, (int)i);
-            printf(REDPURPLE "%.3f,%.3f,%.3f,%.3f\n" RESET,calib->value()(0),calib->value()(1),calib->value()(2),calib->value()(3));
+            printf(REDPURPLE "%.6f,%.6f,%.6f,%.6f\n" RESET,calib->value()(0),calib->value()(1),calib->value()(2),calib->value()(3));
             printf(REDPURPLE "%.5f,%.5f,%.5f,%.5f\n\n" RESET,calib->value()(4),calib->value()(5),calib->value()(6),calib->value()(7));
         }
     }
@@ -248,31 +243,35 @@ void RosVisualizer::visualize_final() {
             T_CtoI.block(0,0,3,3) = quat_2_Rot(calib->quat()).transpose();
             T_CtoI.block(0,3,3,1) = -T_CtoI.block(0,0,3,3)*calib->pos();
             printf(REDPURPLE "T_C%dtoI:\n" RESET,i);
-            printf(REDPURPLE "%.3f,%.3f,%.3f,%.3f,\n" RESET,T_CtoI(0,0),T_CtoI(0,1),T_CtoI(0,2),T_CtoI(0,3));
-            printf(REDPURPLE "%.3f,%.3f,%.3f,%.3f,\n" RESET,T_CtoI(1,0),T_CtoI(1,1),T_CtoI(1,2),T_CtoI(1,3));
-            printf(REDPURPLE "%.3f,%.3f,%.3f,%.3f,\n" RESET,T_CtoI(2,0),T_CtoI(2,1),T_CtoI(2,2),T_CtoI(2,3));
-            printf(REDPURPLE "%.3f,%.3f,%.3f,%.3f\n\n" RESET,T_CtoI(3,0),T_CtoI(3,1),T_CtoI(3,2),T_CtoI(3,3));
+            printf(REDPURPLE "%.6f,%.6f,%.6f,%.6f,\n" RESET,T_CtoI(0,0),T_CtoI(0,1),T_CtoI(0,2),T_CtoI(0,3));
+            printf(REDPURPLE "%.6f,%.6f,%.6f,%.6f,\n" RESET,T_CtoI(1,0),T_CtoI(1,1),T_CtoI(1,2),T_CtoI(1,3));
+            printf(REDPURPLE "%.6f,%.6f,%.6f,%.6f,\n" RESET,T_CtoI(2,0),T_CtoI(2,1),T_CtoI(2,2),T_CtoI(2,3));
+            printf(REDPURPLE "%.6f,%.6f,%.6f,%.6f\n\n" RESET,T_CtoI(3,0),T_CtoI(3,1),T_CtoI(3,2),T_CtoI(3,3));
         }
+    }
+
+    // Final time offset value
+    if(_app->get_state()->_options.do_calib_camera_timeoffset) {
+        printf(REDPURPLE "camera-imu timeoffset = %.5f\n\n" RESET,_app->get_state()->_calib_dt_CAMtoIMU->value()(0));
     }
 
     // Publish RMSE if we have it
     if(!gt_states.empty()) {
-        printf(REDPURPLE "RMSE average: %.3f (deg) orientation\n" RESET,summed_rmse_ori/summed_number);
-        printf(REDPURPLE "RMSE average: %.3f (m) position\n\n" RESET,summed_rmse_pos/summed_number);
+        printf(REDPURPLE "RMSE average: %.6f (deg) orientation\n" RESET,summed_rmse_ori/summed_number);
+        printf(REDPURPLE "RMSE average: %.6f (m) position\n\n" RESET,summed_rmse_pos/summed_number);
     }
 
     // Publish RMSE and NEES if doing simulation
     if(_sim != nullptr) {
-        printf(REDPURPLE "RMSE average: %.3f (deg) orientation\n" RESET,summed_rmse_ori/summed_number);
-        printf(REDPURPLE "RMSE average: %.3f (m) position\n\n" RESET,summed_rmse_pos/summed_number);
-        printf(REDPURPLE "NEES average: %.3f (deg) orientation\n" RESET,summed_nees_ori/summed_number);
-        printf(REDPURPLE "NEES average: %.3f (m) position\n\n" RESET,summed_nees_pos/summed_number);
+        printf(REDPURPLE "RMSE average: %.6f (deg) orientation\n" RESET,summed_rmse_ori/summed_number);
+        printf(REDPURPLE "RMSE average: %.6f (m) position\n\n" RESET,summed_rmse_pos/summed_number);
+        printf(REDPURPLE "NEES average: %.6f (deg) orientation\n" RESET,summed_nees_ori/summed_number);
+        printf(REDPURPLE "NEES average: %.6f (m) position\n\n" RESET,summed_nees_pos/summed_number);
     }
 
     // Print the total time
     rT2 =  boost::posix_time::microsec_clock::local_time();
-    printf(REDPURPLE "TIME: %.3f seconds\n\n" RESET,(rT2-rT1).total_microseconds()*1e-6);
-
+    printf(REDPURPLE "TIME: %.6f seconds\n\n" RESET,(rT2-rT1).total_microseconds()*1e-6);
 }
 
 
@@ -679,7 +678,7 @@ void RosVisualizer::publish_groundtruth() {
     summed_number++;
 
     // Nice display for the user
-    printf(REDPURPLE "error to gt => %.3f, %.3f (deg,m) | average error => %.3f, %.3f (deg,m) | called %d times\n" RESET,rmse_ori,rmse_pos,summed_rmse_ori/summed_number,summed_rmse_pos/summed_number, (int)summed_number);
+    printf(REDPURPLE "error to gt => %.6f, %.6f (deg,m) | average error => %.6f, %.6f (deg,m) | called %d times\n" RESET,rmse_ori,rmse_pos,summed_rmse_ori/summed_number,summed_rmse_pos/summed_number, (int)summed_number);
     printf(REDPURPLE "nees => %.1f, %.1f (ori,pos) | average nees = %.1f, %.1f (ori,pos)\n" RESET,ori_nees,pos_nees,summed_nees_ori/summed_number,summed_nees_pos/summed_number);
 
 

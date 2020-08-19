@@ -41,7 +41,7 @@ namespace ov_type {
     class JPLQuat : public Type {
 
     public:
-
+        //0,0,0,1 初始化  value 和 fej都是4,1向量，但有对应的旋转矩阵形式
         JPLQuat() : Type(3) {
             Eigen::Matrix<double, 4, 1> q0;
             q0.setZero();
@@ -68,6 +68,7 @@ namespace ov_type {
 
             //Build perturbing quaternion
             Eigen::Matrix<double, 4, 1> dq;
+            //小角近似形式
             dq << .5 * dx, 1.0;
             dq = ov_core::quatnorm(dq);
 
@@ -95,6 +96,7 @@ namespace ov_type {
             Type *Clone = new JPLQuat();
             Clone->set_value(value());
             Clone->set_fej(fej());
+            //返回的是个指针，这个指针指向的内容不会被销毁
             return Clone;
         }
 

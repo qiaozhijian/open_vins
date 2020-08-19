@@ -29,7 +29,7 @@ namespace ov_type {
 
 
     /**
-     * @brief Base class for estimated variables.
+     * @brief Base class for estimated variables. 虚拟函数如果子类不对其进行实现，则调用父类的
      *
      * This class is used how variables are represented or updated (e.g., vectors or quaternions).
      * Each variable is defined by its error state size and its location in the covariance matrix.

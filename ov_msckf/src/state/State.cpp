@@ -24,8 +24,8 @@
 using namespace ov_core;
 using namespace ov_msckf;
 
-
-
+// _variables _Cov
+// IMU 15 td 1 { camPose 6 intrinstic 8}n
 State::State(StateOptions &options) {
 
     // Save our options

@@ -74,7 +74,7 @@ namespace ov_eval {
                 ROS_ERROR("Path: %s",filename.c_str());
                 std::exit(EXIT_FAILURE);
             }
-            outfile << "# timestamp(s) tx ty tz qx qy qz qw Pr11 Pr12 Pr13 Pr22 Pr23 Pr33 Pt11 Pt12 Pt13 Pt22 Pt23 Pt33" << std::endl;
+            //outfile << "# timestamp(s) tx ty tz qx qy qz qw Pr11 Pr12 Pr13 Pr22 Pr23 Pr33 Pt11 Pt12 Pt13 Pt22 Pt23 Pt33" << std::endl;
             // Set initial state values
             timestamp = -1;
             q_ItoG << 0,0,0,1;
@@ -170,6 +170,8 @@ namespace ov_eval {
                     << q_ItoG(0) << " " << q_ItoG(1) << " " << q_ItoG(2) << " " << q_ItoG(3);
 
             // output the covariance only if we have it
+            // qzj 不输出协方差矩阵
+            has_covariance = false;
             if(has_covariance) {
                 outfile.precision(10);
                 outfile << " " << cov_rot(0,0) << " " << cov_rot(0,1) << " " << cov_rot(0,2) << " " << cov_rot(1,1) << " " << cov_rot(1,2) << " " << cov_rot(2,2)

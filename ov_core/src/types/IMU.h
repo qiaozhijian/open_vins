@@ -71,6 +71,7 @@ namespace ov_type {
         void set_local_id(int new_id) override {
             _id = new_id;
             _pose->set_local_id(new_id);
+            // _pose->size()=6
             _v->set_local_id(_pose->id()+_pose->size());
             _bg->set_local_id(_v->id()+_v->size());
             _ba->set_local_id(_bg->id()+_bg->size());
@@ -92,11 +93,15 @@ namespace ov_type {
             dq << .5 * dx.block(0, 0, 3, 1), 1.0;
             dq = ov_core::quatnorm(dq);
 
+            //更新JPLPose
             newX.block(0, 0, 4, 1) = ov_core::quat_multiply(dq, quat());
             newX.block(4, 0, 3, 1) += dx.block(3, 0, 3, 1);
 
+            //更新速度
             newX.block(7, 0, 3, 1) += dx.block(6, 0, 3, 1);
+            //更新角速度偏置
             newX.block(10, 0, 3, 1) += dx.block(9, 0, 3, 1);
+            //更新加速度偏置
             newX.block(13, 0, 3, 1) += dx.block(12, 0, 3, 1);
 
             set_value(newX);
@@ -119,6 +124,16 @@ namespace ov_type {
             _ba->set_value(new_value.block(13, 0, 3, 1));
 
             _value = new_value;
+
+
+            //Eigen::MatrixXd force = new_value.block(13, 0, 3, 1);
+            //force(0,0) = 0.0;
+            //force(1,1) = 0.0;
+            //force(2,2) = 0.0;
+            //_ba->set_value(force);
+            //_value(13,0) = 0.0;
+            //_value(14,1) = 0.0;
+            //_value(15,2) = 0.0;
         }
 
         /**

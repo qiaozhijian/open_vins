@@ -28,7 +28,7 @@
 namespace ov_type {
 
     /**
-     * @brief Derived Type class that implements vector variables
+     * @brief Derived Type class that implements vector variables 维度任意
      */
     class Vec : public Type {
 
